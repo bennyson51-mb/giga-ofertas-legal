@@ -1,0 +1,27 @@
+name: Publicar logo Analises do Benny
+
+on:
+  push:
+    paths:
+      - 'assets/analises-do-benny-logo.b64'
+      - '.github/workflows/publish-analises-logo.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Decode logo
+        run: |
+          base64 -d assets/analises-do-benny-logo.b64 > assets/analises-do-benny-logo.jpg
+      - name: Commit generated image
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/analises-do-benny-logo.jpg
+          git diff --cached --quiet && exit 0
+          git commit -m "Publish Analises do Benny logo"
+          git push
